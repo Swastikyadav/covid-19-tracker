@@ -7,6 +7,8 @@ import Paper from '@material-ui/core/Paper';
 
 import { EnhancedTableHead, EnhancedTableBody, EnhancedTableToolbar } from "../";
 
+import styles from "./Table.module.css";
+
 function EnhancedTable() {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
@@ -18,8 +20,10 @@ function EnhancedTable() {
   }
   
   const rows = [
-    createData('US', 305, 3.7, 67),
-    createData('India', 452, 25.0, 51),
+    createData('US', 305, 37, 67),
+    createData('India', 452, 25, 51),
+    createData('Argentina', 30, 15, 4),
+    createData('Australia', 400, 25, 1),
   ];
   
   const useStyles = makeStyles((theme) => ({
@@ -48,13 +52,13 @@ function EnhancedTable() {
 
   const classes = useStyles();
 
-  const handleRequestSort = (property) => {
+  const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
 
-  const handleChangePage = (newPage) => {
+  const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
@@ -64,10 +68,10 @@ function EnhancedTable() {
   };
 
   return (
-    <div className={classes.root}>
+    <div className={styles.container}>
       <Paper className={classes.paper}>
         <EnhancedTableToolbar />
-        <TableContainer>
+        <TableContainer className={styles.table}>
           <Table
             className={classes.table}
             aria-labelledby="tableTitle"

@@ -1,0 +1,15 @@
+.container {
+  width: 75%;
+  margin: 50px 0;
+}
+
+.table {
+  width: 95% !important;
+  margin: 0 auto;
+}
+
+@media all and (max-width: 770px) {
+  .container {
+    width: 100%;
+  }
+}
