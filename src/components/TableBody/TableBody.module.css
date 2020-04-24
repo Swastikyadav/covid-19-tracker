@@ -1,0 +1,17 @@
+.confirmed {
+  color: rgb(0, 0, 255) !important;
+  font-weight: bold !important;
+  font-size: 17px !important;
+}
+
+.recovered {
+  color: rgb(0, 255, 0) !important;
+  font-weight: bold !important;
+  font-size: 17px !important;
+}
+
+.deaths {
+  color: rgb(255, 0, 0) !important;
+  font-weight: bold !important;
+  font-size: 17px !important;
+}

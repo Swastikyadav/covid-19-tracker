@@ -8,6 +8,10 @@
   margin: 0 auto;
 }
 
+.imageContainer {
+  margin-left: 100%;
+}
+
 @media all and (max-width: 770px) {
   .container {
     width: 100%;

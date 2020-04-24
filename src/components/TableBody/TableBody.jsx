@@ -3,6 +3,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import TableBody from '@material-ui/core/TableBody';
 
+import styles from "./TableBody.module.css";
+
 const EnhancedTableBody = ({ rows, order, orderBy, page, rowsPerPage }) => {
   function stableSort(array, comparator) {
     const stabilizedThis = array.map((el, index) => [el, index]);
@@ -47,9 +49,9 @@ const EnhancedTableBody = ({ rows, order, orderBy, page, rowsPerPage }) => {
               <TableCell component="th" scope="row" padding="none">
                 {row.country}
               </TableCell>
-              <TableCell align="right">{row.confirmed}</TableCell>
-              <TableCell align="right">{row.recovered}</TableCell>
-              <TableCell align="right">{row.deaths}</TableCell>
+              <TableCell align="right" className={styles.confirmed}>{row.confirmed}</TableCell>
+              <TableCell align="right" className={styles.recovered}>{row.recovered}</TableCell>
+              <TableCell align="right" className={styles.deaths}>{row.deaths}</TableCell>
             </TableRow>
           );
         })}

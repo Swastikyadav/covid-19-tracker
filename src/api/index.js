@@ -41,3 +41,26 @@ export const fetchCountries = async () => {
     console.log(error);
   }
 }
+
+export const fetchAllCountryData = async () => {
+  try {
+    const { data: { countries } } = await axios.get(`${baseUrl}/countries`);
+    return countries.reduce(async (acc, {name}, i) => {
+      if (name === "Gambia") {
+        return acc;
+      } else {
+        const arr = await acc;
+        const { data: { confirmed, recovered, deaths } } = await axios.get(`${baseUrl}/countries/${name}`);
+        arr.push({
+          name,
+          confirmed: confirmed.value,
+          recovered: recovered.value,
+          deaths: deaths.value
+        });
+        return arr;
+      }
+    }, Promise.resolve([]));
+  } catch(error) {
+    console.log(error);
+  }
+}

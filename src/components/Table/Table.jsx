@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableContainer from '@material-ui/core/TableContainer';
@@ -6,25 +6,33 @@ import TablePagination from '@material-ui/core/TablePagination';
 import Paper from '@material-ui/core/Paper';
 
 import { EnhancedTableHead, EnhancedTableBody, EnhancedTableToolbar } from "../";
+import { fetchAllCountryData } from "../../api";
+import LoaderImage from "../../images/loader.svg";
 
 import styles from "./Table.module.css";
 
 function EnhancedTable() {
-  const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('calories');
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [allCountryData, setAllCountryData] = useState([]);
+  const [order, setOrder] = useState('asc');
+  const [orderBy, setOrderBy] = useState('calories');
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  useEffect(() => {
+    const fetchAPI = async () => {
+      setAllCountryData(await fetchAllCountryData());
+    }
+
+    fetchAPI();
+  }, []);
 
   function createData(country, confirmed, recovered, deaths) {
     return { country, confirmed, recovered, deaths };
   }
-  
-  const rows = [
-    createData('US', 305, 37, 67),
-    createData('India', 452, 25, 51),
-    createData('Argentina', 30, 15, 4),
-    createData('Australia', 400, 25, 1),
-  ];
+
+  const rows = allCountryData.map(data => {
+    return createData(data.name, data.confirmed, data.recovered, data.deaths)
+  });
   
   const useStyles = makeStyles((theme) => ({
     root: {
@@ -84,13 +92,19 @@ function EnhancedTable() {
               onRequestSort={handleRequestSort}
               rowCount={rows.length}
             />
-            <EnhancedTableBody
+            {rows.length ? (
+              <EnhancedTableBody
               rows={rows}
               order={order}
               orderBy={orderBy}
               page={page}
               rowsPerPage={rowsPerPage}
             />
+            ) : (
+              <div className={styles.imageContainer}>
+                <img src={LoaderImage} alt="bouncing-ball" />
+              </div>
+            )}
           </Table>
         </TableContainer>
         <TablePagination
