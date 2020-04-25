@@ -15,7 +15,11 @@ const Map = ({ setTooltipContent }) => {
   const [info, setInfo] = useState("");
 
   useEffect(() => {
-    fetchData(`${country}`).then(res => setInfo(res));
+    const fetchAPI = async () => {
+      setInfo(await fetchData(`${country.name}`, `${country.iso_a2}`, `${country.iso_a3}`));
+    }
+
+    fetchAPI();
   }, [country]);
 
   return (
@@ -25,18 +29,25 @@ const Map = ({ setTooltipContent }) => {
         <Geographies geography={geoUrl}>
         {({ geographies }) =>
           geographies.map(geo => {
-            geo.properties.confirmed = info.confirmed.value;
-            geo.properties.recovered = info.recovered.value;
-            geo.properties.deaths = info.deaths.value;
+            const { NAME, ISO_A2, ISO_A3 } = geo.properties;
+            
+            if (info && info.confirmed) {
+              geo.properties.confirmed = info.confirmed.value;
+              geo.properties.recovered = info.recovered.value;
+              geo.properties.deaths = info.deaths.value;
+            }
+
             return (<Geography
               key={geo.rsmKey}
               geography={geo}
-              onMouseEnter={() => {
-                console.log(geo.properties);
-                const { NAME } = geo.properties;
-                setCountry(`${NAME}`);
+              onMouseEnter={async () => {
+                await setCountry({ name: `${NAME}`, iso_a2: `${ISO_A2}`, iso_a3: `${ISO_A3}` });
+
                 setTooltipContent(
-                  `${NAME} - ${geo.properties.confirmed}`
+                  info && info.confirmed ? `${NAME}
+                  confirmed: ${geo.properties.confirmed}
+                  recovered: ${geo.properties.recovered}
+                  deaths: ${geo.properties.deaths}` : "No Info..., Sorry!"
                 );
               }}
               onMouseLeave={() => {
@@ -44,7 +55,7 @@ const Map = ({ setTooltipContent }) => {
               }}
               style={{
                 default: {
-                  fill: "#D6D6DA",
+                  fill: "gray",
                   outline: "none"
                 },
                 hover: {

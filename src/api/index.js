@@ -2,11 +2,33 @@ import axios from "axios";
 
 const baseUrl = "https://covid19.mathdro.id/api";
 
-export const fetchData = async (country) => {
+export const fetchData = async (country, iso_a2, iso_a3) => {
   let changeableUrl = baseUrl;
+  let countryAbbr = "";
 
+  const { data: { countries } } = await axios.get(`${baseUrl}/countries`);
+  const countryExists = countries.find(({ name }) => {
+    switch(name) {
+      case country:
+        countryAbbr = name;
+        return name;
+      case iso_a2:
+        countryAbbr = name;
+        return name;
+      case iso_a3:
+        countryAbbr = name;
+        return name;
+      default:
+        return false;
+    }
+  });
+  
   if (country) {
-    changeableUrl = `${baseUrl}/countries/${country}`;
+    if (countryExists) {
+      changeableUrl = `${baseUrl}/countries/${countryAbbr}`;
+    } else {
+      return;
+    }
   }
 
   try {
